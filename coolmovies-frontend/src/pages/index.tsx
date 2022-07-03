@@ -10,6 +10,8 @@ import {
 import type { NextPage } from 'next';
 import { exampleActions, useAppDispatch, useAppSelector } from '../redux';
 
+import { Header } from '../components';
+
 const primary = '#1976d2';
 
 const Home: NextPage = () => {
@@ -17,9 +19,7 @@ const Home: NextPage = () => {
   const exampleState = useAppSelector((state) => state.example);
   return (
     <div css={styles.root}>
-      <Paper elevation={3} css={styles.navBar}>
-        <Typography>{'EcoPortal'}</Typography>
-      </Paper>
+      <Header />
 
       <div css={styles.body}>
         <Typography variant={'h1'} css={styles.heading}>
@@ -35,12 +35,10 @@ const Home: NextPage = () => {
         <div css={styles.mainControls}>
           <Tooltip
             title={`Side Effect Count from Epic (Gets run on odd values): ${exampleState.sideEffectCount}`}
-            arrow
-          >
+            arrow>
             <Button
               variant={'contained'}
-              onClick={() => dispatch(exampleActions.increment())}
-            >
+              onClick={() => dispatch(exampleActions.increment())}>
               {`Redux Increment: ${exampleState.value}`}
             </Button>
           </Tooltip>
@@ -52,8 +50,7 @@ const Home: NextPage = () => {
                   ? exampleActions.clearData()
                   : exampleActions.fetch()
               )
-            }
-          >
+            }>
             {exampleState.fetchData ? 'Hide some data' : 'Fetch some data'}
           </Button>
         </div>
