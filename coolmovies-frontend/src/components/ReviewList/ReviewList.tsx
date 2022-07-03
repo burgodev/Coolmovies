@@ -13,7 +13,7 @@ import {
   Skeleton,
 } from '@mui/material';
 
-import { IconEdit } from '..';
+import { ModalReview, IconEdit } from '..';
 import { Review } from '../../types/typings';
 
 const ReviewList = () => {
@@ -77,11 +77,11 @@ const ReviewList = () => {
           Add new review
         </Button>
 
-        {/* <ModalReview
+        <ModalReview
           open={openModalReview}
           onClose={() => (setOpenModalReview(false), setReview(null))}
           review={review ?? null}
-        /> */}
+        />
       </Container>
     </section>
   );
