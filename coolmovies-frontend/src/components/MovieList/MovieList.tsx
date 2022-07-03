@@ -1,27 +1,66 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { makeStyles, createStyles } from '@mui/styles';
 import { Card, Theme, Grid, Skeleton, Box, Typography } from '@mui/material';
 
-import { moviesActions, useAppDispatch, useAppSelector } from '../../redux';
+import { Snackbar } from '../';
+import { ISnackbar } from '../../types/typings';
+
+import { Movie } from '../../types/typings';
+import {
+  moviesActions,
+  reviewsActions,
+  useAppDispatch,
+  useAppSelector,
+} from '../../redux';
 
 const MovieList = () => {
   const classes = useStyles();
-
+  const router = useRouter();
+  const [snackbar, setSnackbar] = useState<
+    Pick<ISnackbar, 'message' | 'severity' | 'open'>
+  >({
+    severity: 'warning',
+    message: '',
+    open: false,
+  });
   const dispatch = useAppDispatch();
-  const { data, loading } = useAppSelector((state) => state.movies);
+  const { data, loading, error } = useAppSelector((state) => state.movies);
+  const reviewData = useAppSelector((state) => state.reviews?.data);
 
   useEffect(() => {
     dispatch(moviesActions.loading());
     dispatch(moviesActions.fetch());
   }, [dispatch]);
 
+  const selectMovie = (movie: Movie) => {
+    dispatch(reviewsActions.loading());
+    dispatch(reviewsActions.fetch(movie));
+    router.push('/reviews');
+  };
+
+  useEffect(() => {
+    console.log('error', error);
+    if (error)
+      setSnackbar({
+        open: true,
+        severity: 'error',
+        message: error,
+      });
+  }, [error]);
+
   if (loading) return <SkeletonMovieList />;
 
   return (
     <section className={classes.section}>
+      {!reviewData?.movie.id && (
+        <Box className={classes.selectMovie}>
+          <Typography variant={'h2'}>{'Select a movie'}</Typography>
+        </Box>
+      )}
+
       <Grid container spacing={2} className={classes.grid} data-testid='grid'>
         {data?.map((movie) => (
           <Grid
@@ -36,7 +75,7 @@ const MovieList = () => {
               key={movie.id}
               data-testid='card'
               className={classes.card}
-              onClick={() => console.log(movie)}
+              onClick={() => selectMovie(movie)}
               style={{
                 backgroundImage: `url(${movie.imgUrl})`,
               }}
@@ -44,6 +83,19 @@ const MovieList = () => {
           </Grid>
         ))}
       </Grid>
+
+      <Snackbar
+        open={snackbar.open}
+        severity={snackbar.severity}
+        message={snackbar.message}
+        onClose={() =>
+          setSnackbar({
+            open: false,
+            severity: snackbar.severity,
+            message: snackbar.message,
+          })
+        }
+      />
     </section>
   );
 };
