@@ -22,9 +22,7 @@ describe('Movies Component', () => {
       </Provider>
     );
 
-    expect(
-      screen.getByTestId('skeleton')
-    ).toBeInTheDocument();
+    expect(screen.getByTestId('skeleton')).toBeInTheDocument();
   });
 
   it('should have a grid', () => {
