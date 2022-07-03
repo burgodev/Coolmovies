@@ -11,6 +11,10 @@ import {
   NormalizedCacheObject,
 } from '@apollo/client';
 
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import { theme } from '../utils/theme';
+
 const App: FC<AppProps> = ({ Component, pageProps }) => {
   const [store, setStore] = useState<EnhancedStore | null>(null);
   React.useEffect(() => {
@@ -32,7 +36,10 @@ const App: FC<AppProps> = ({ Component, pageProps }) => {
         <meta name='viewport' content='width=device-width, initial-scale=1.0' />
       </Head>
       <ReduxProvider store={store}>
-        <Component {...pageProps} />
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ThemeProvider>
       </ReduxProvider>
     </>
   );
