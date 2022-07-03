@@ -1,11 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik, Form } from 'formik';
 
-import {
-  reviewsActions,
-  useAppDispatch,
-  useAppSelector,
-} from '../../redux';
+import { reviewsActions, useAppDispatch, useAppSelector } from '../../redux';
 import { makeStyles, createStyles } from '@mui/styles';
 import {
   Rating,
@@ -22,8 +18,6 @@ import {
 } from '@mui/material';
 
 import { Review } from '../../types/typings';
-import { Snackbar } from '../';
-import { ISnackbar } from '../../types/typings';
 
 interface Props {
   open: boolean;
@@ -36,9 +30,7 @@ const ModalReview = ({ open, review, onClose }: Props) => {
 
   const dispatch = useAppDispatch();
   const classes = useStyles();
-  const { data, loading, error } = useAppSelector(
-    (state) => state.reviews
-  );
+  const { loading } = useAppSelector((state) => state.reviews);
 
   useEffect(() => {
     if (review?.id) {
@@ -49,9 +41,10 @@ const ModalReview = ({ open, review, onClose }: Props) => {
   }, [review]);
 
   const handleSubmit = async (values: any) => {
+    dispatch(reviewsActions.loading());
     edit
-      ? dispatch(reviewsActions.update(values))
-      : dispatch(reviewsActions.create(values));
+      ? await dispatch(reviewsActions.update(values))
+      : await dispatch(reviewsActions.create(values));
 
     onClose(true);
   };
@@ -61,7 +54,7 @@ const ModalReview = ({ open, review, onClose }: Props) => {
       classes={{
         paper: classes.paper,
       }}
-      maxWidth="lg"
+      maxWidth='lg'
       open={open}
       onClose={onClose}>
       <Formik
@@ -71,75 +64,56 @@ const ModalReview = ({ open, review, onClose }: Props) => {
         enableReinitialize>
         {(formik) => (
           <Form onSubmit={formik.handleSubmit}>
-            <DialogTitle>
-              {edit ? 'Edit review' : 'Create review'}
-            </DialogTitle>
+            <DialogTitle>{edit ? 'Edit review' : 'Create review'}</DialogTitle>
             <DialogContent>
               <TextField
                 className={classes.field}
                 disabled={edit}
-                variant="outlined"
+                variant='outlined'
                 fullWidth
-                id="name"
+                id='name'
                 name={'userByUserReviewerId.name'}
-                label="Name"
-                placeholder="John Doe"
-                value={
-                  formik.values.userByUserReviewerId?.name
-                }
+                label='Name'
+                placeholder='John Doe'
+                value={formik.values.userByUserReviewerId?.name}
                 onChange={formik.handleChange}
                 error={
-                  formik.touched.userByUserReviewerId
-                    ?.name &&
-                  Boolean(
-                    formik.errors.userByUserReviewerId?.name
-                  )
+                  formik.touched.userByUserReviewerId?.name &&
+                  Boolean(formik.errors.userByUserReviewerId?.name)
                 }
                 helperText={
-                  formik.touched.userByUserReviewerId
-                    ?.name &&
+                  formik.touched.userByUserReviewerId?.name &&
                   formik.errors.userByUserReviewerId?.name
                 }
               />
 
               <TextField
                 className={classes.field}
-                variant="outlined"
+                variant='outlined'
                 fullWidth
-                id="textfield-title"
-                name="title"
-                label="Title"
-                placeholder="Awesome movie!"
+                id='textfield-title'
+                name='title'
+                label='Title'
+                placeholder='Awesome movie!'
                 value={formik.values.title}
                 onChange={formik.handleChange}
-                error={
-                  formik.touched.title &&
-                  Boolean(formik.errors.title)
-                }
-                helperText={
-                  formik.touched.title &&
-                  formik.errors.title
-                }
+                error={formik.touched.title && Boolean(formik.errors.title)}
+                helperText={formik.touched.title && formik.errors.title}
               />
 
               <TextField
                 className={classes.field}
-                variant="outlined"
+                variant='outlined'
                 fullWidth
-                id="textfield-body"
-                name="body"
-                label="Description"
+                id='textfield-body'
+                name='body'
+                label='Description'
                 multiline
                 rows={8}
                 value={formik.values.body}
                 onChange={formik.handleChange}
-                error={
-                  formik.touched.body &&
-                  Boolean(formik.errors.body)
-                }
-                helperText={
-                  formik.touched.body && formik.errors.body
-                }
+                error={formik.touched.body && Boolean(formik.errors.body)}
+                helperText={formik.touched.body && formik.errors.body}
               />
 
               <Box
@@ -147,19 +121,14 @@ const ModalReview = ({ open, review, onClose }: Props) => {
                   display: 'flex',
                   flexDirection: 'column',
                 }}>
-                <Typography className={classes.typography}>
-                  Rating
-                </Typography>
+                <Typography className={classes.typography}>Rating</Typography>
                 <Rating
-                  data-testid="rating"
-                  size="large"
-                  name="simple-controlled"
+                  data-testid='rating'
+                  size='large'
+                  name='simple-controlled'
                   value={formik.values.rating}
                   onChange={(event, newValue) => {
-                    formik.setFieldValue(
-                      'rating',
-                      newValue
-                    );
+                    formik.setFieldValue('rating', newValue);
                   }}
                 />
                 <FormHelperText
@@ -171,12 +140,11 @@ const ModalReview = ({ open, review, onClose }: Props) => {
             </DialogContent>
             <DialogActions className={classes.actions}>
               <Button
-                type="submit"
-                data-testid="button"
+                type='submit'
+                data-testid='button'
                 className={classes.button}
-                variant="contained"
-                // disabled={loading}
-              >
+                variant='contained'
+                disabled={loading}>
                 {edit ? 'Edit review' : 'Create review'}
               </Button>
             </DialogActions>
