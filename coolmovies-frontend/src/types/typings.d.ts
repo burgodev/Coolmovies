@@ -26,6 +26,5 @@ export interface ISnackbar {
   severity: 'error' | 'info' | 'success' | 'warning';
   message: string;
   open: boolean;
-
   onClose: () => void;
 }

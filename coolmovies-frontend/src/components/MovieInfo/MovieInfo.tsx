@@ -1,40 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 
-import { useAppSelector } from '../../redux';
-
 import { makeStyles, createStyles } from '@mui/styles';
-import {
-  Typography,
-  Rating,
-  Theme,
-  Container,
-  Skeleton,
-} from '@mui/material';
+import { Typography, Rating, Theme, Container, Skeleton } from '@mui/material';
+
+import { useAppSelector } from '../../redux';
 
 const MovieInfo = () => {
   const classes = useStyles();
-
   const [rating, setRating] = useState<number>(0);
-  const { data, loading } = useAppSelector(
-    (state) => state.reviews
-  );
+  const { data, loading } = useAppSelector((state) => state.reviews);
 
   useEffect(() => {
     if (data?.reviews.length) {
       const rating =
         Number(
-          data?.reviews.reduce(
-            (prev: any, current: any) => {
-              let aux;
-              if (typeof prev === 'object') {
-                aux = prev.rating + current.rating;
-              } else {
-                aux = prev + current.rating;
-              }
-              return aux;
+          data?.reviews.reduce((prev: any, current: any) => {
+            let aux;
+            if (typeof prev === 'object') {
+              aux = prev.rating + current.rating;
+            } else {
+              aux = prev + current.rating;
             }
-          )
+            return aux;
+          })
         ) / data?.reviews.length;
 
       setRating(rating);
@@ -45,44 +34,37 @@ const MovieInfo = () => {
 
   return (
     <section className={classes.section}>
-      <Container maxWidth="xl">
+      <Container maxWidth='xl'>
         <article className={classes.article}>
           <div className={classes.imgContainer}>
             <Image
               src={data?.movie.imgUrl!}
-              alt="banner"
+              alt='banner'
               className={classes.img}
-              data-testid="image"
-              layout="fill"
+              data-testid='image'
+              layout='fill'
             />
           </div>
           <Typography
             variant={'h1'}
-            data-testid="title"
+            data-testid='title'
             className={classes.title}>
             {data?.movie?.title}
           </Typography>{' '}
-          <Typography
-            variant={'h2'}
-            data-testid="date">{` (${
+          <Typography variant={'h2'} data-testid='date'>{` (${
             new Date(data?.movie.releaseDate ?? '')
               .toLocaleString()
               .split(' ')[0]
           })`}</Typography>
-          <Typography
-            variant={'subtitle1'}
-            data-testid="director">
-            {
-              data?.movie?.movieDirectorByMovieDirectorId
-                .name
-            }
+          <Typography variant={'subtitle1'} data-testid='director'>
+            {data?.movie?.movieDirectorByMovieDirectorId.name}
           </Typography>
           <Rating
-            name="read-only"
+            name='read-only'
             value={rating}
             readOnly
             precision={0.5}
-            size="large"
+            size='large'
           />
         </article>
       </Container>
@@ -94,7 +76,7 @@ const SkeletonReviews = () => {
   const classes = useStyles();
   return (
     <Skeleton
-      data-testid="loading"
+      data-testid='skeleton'
       className={classes.skeleton}
       width={'75%'}
       height={800}

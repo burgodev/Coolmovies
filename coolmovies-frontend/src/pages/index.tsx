@@ -12,7 +12,7 @@ const Home: NextPage = () => {
       <Header />
 
       <div className={classes.body}>
-        <Typography variant={'h1'} className={classes.heading}>
+        <Typography variant={'h1'} className={classes.typography}>
           {'Coolmovies Reviews'}
         </Typography>
 
@@ -31,7 +31,6 @@ const useStyles = makeStyles(() =>
       flexDirection: 'column',
       alignItems: 'center',
     },
-
     body: {
       alignSelf: 'stretch',
       padding: 32,
@@ -40,7 +39,7 @@ const useStyles = makeStyles(() =>
       alignItems: 'center',
       gap: 16,
     },
-    heading: {
+    typography: {
       marginTop: 16,
       fontSize: '2.75rem',
       textAlign: 'center',

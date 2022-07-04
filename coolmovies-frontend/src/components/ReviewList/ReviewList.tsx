@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { useAppSelector } from '../../redux';
-
 import { makeStyles, createStyles } from '@mui/styles';
 import {
   Button,
@@ -14,28 +12,26 @@ import {
 } from '@mui/material';
 
 import { ModalReview, IconEdit } from '..';
+import { useAppSelector } from '../../redux';
 import { Review } from '../../types/typings';
 
 const ReviewList = () => {
   const classes = useStyles();
-
   const [openModalReview, setOpenModalReview] = useState<boolean>(false);
-
   const [review, setReview] = useState<Review | null>();
-
   const { data, loading } = useAppSelector((state) => state.reviews);
 
   if (loading) return <SkeletonReviews />;
 
   return (
     <section>
-      <Container maxWidth='xl' className={classes.reviews}>
+      <Container maxWidth='xl' className={classes.container}>
         {data?.reviews.map((review: any) => (
           <article key={review.id} className={classes.article}>
             <Box className={classes.review}>
               <Box className={classes.flex}>
                 <Typography
-                  variant={'h3'}
+                  variant={'h4'}
                   data-testid='title'
                   className={classes.title}>
                   {review.title}
@@ -47,10 +43,7 @@ const ReviewList = () => {
                 />
               </Box>
 
-              <Typography
-                variant={'caption'}
-                data-testid='username'
-                className={classes.name}>
+              <Typography data-testid='username'>
                 {review.userByUserReviewerId.name}
               </Typography>
 
@@ -74,7 +67,7 @@ const ReviewList = () => {
           data-testid='addNewReview'
           className={classes.button}
           onClick={() => (setOpenModalReview(true), setReview(initialValues))}>
-          Add new review
+          {'Add new review'}
         </Button>
 
         <ModalReview
@@ -129,15 +122,8 @@ const useStyles = makeStyles((theme: Theme) =>
         padding: '24px',
       },
     },
-    reviews: {
+    container: {
       margin: '32px auto',
-      display: 'flex !important',
-      justifyContent: 'center',
-      alignItems: 'center',
-      flexDirection: 'column',
-    },
-    movie: {
-      margin: '32px auto 0px',
       display: 'flex !important',
       justifyContent: 'center',
       alignItems: 'center',
@@ -153,23 +139,16 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'space-between',
+      gap: 12,
     },
 
     title: {
-      fontSize: '2.5rem !important',
-      marginRight: '20px !important',
+      marginRight: '20px',
       textAlign: 'center',
     },
-    name: {
-      fontSize: '1.25rem !important',
-      fontWeight: 400,
-    },
+
     rating: {
       marginBottom: 40,
-    },
-
-    date: {
-      fontSize: '2rem !important',
     },
 
     article: {

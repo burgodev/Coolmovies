@@ -26,6 +26,7 @@ const Reviews: NextPage = () => {
     (state) => state.reviews
   );
 
+  // I'm not really a fan of how MUI deals with snackbars... I would prefer to use a lib like https://www.npmjs.com/package/react-simple-snackbar and use a Provider / Hook instead. :)
   useEffect(() => {
     if (error)
       setSnackbar({

@@ -30,7 +30,6 @@ const ModalReview = ({ open, review, onClose }: Props) => {
 
   const dispatch = useAppDispatch();
   const classes = useStyles();
-  const { loading } = useAppSelector((state) => state.reviews);
 
   useEffect(() => {
     if (review?.id) {
@@ -41,7 +40,6 @@ const ModalReview = ({ open, review, onClose }: Props) => {
   }, [review]);
 
   const handleSubmit = async (values: any) => {
-    dispatch(reviewsActions.loading());
     edit
       ? await dispatch(reviewsActions.update(values))
       : await dispatch(reviewsActions.create(values));
@@ -143,8 +141,7 @@ const ModalReview = ({ open, review, onClose }: Props) => {
                 type='submit'
                 data-testid='button'
                 className={classes.button}
-                variant='contained'
-                disabled={loading}>
+                variant='contained'>
                 {edit ? 'Edit review' : 'Create review'}
               </Button>
             </DialogActions>

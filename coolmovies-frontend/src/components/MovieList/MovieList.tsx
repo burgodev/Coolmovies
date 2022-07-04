@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { useRouter } from 'next/router';
 
 import { makeStyles, createStyles } from '@mui/styles';
@@ -7,7 +6,6 @@ import { Card, Theme, Grid, Skeleton, Box, Typography } from '@mui/material';
 
 import { Snackbar } from '../';
 import { ISnackbar } from '../../types/typings';
-
 import { Movie } from '../../types/typings';
 import {
   moviesActions,
@@ -19,16 +17,16 @@ import {
 const MovieList = () => {
   const classes = useStyles();
   const router = useRouter();
-  const [snackbar, setSnackbar] = useState<
-    Pick<ISnackbar, 'message' | 'severity' | 'open'>
-  >({
-    severity: 'warning',
-    message: '',
-    open: false,
-  });
   const dispatch = useAppDispatch();
   const { data, loading, error } = useAppSelector((state) => state.movies);
   const reviewData = useAppSelector((state) => state.reviews?.data);
+  const [snackbar, setSnackbar] = useState<
+    Pick<ISnackbar, 'message' | 'severity' | 'open'>
+  >({
+    severity: 'info',
+    message: '',
+    open: false,
+  });
 
   useEffect(() => {
     dispatch(moviesActions.loading());
@@ -38,11 +36,11 @@ const MovieList = () => {
   const selectMovie = (movie: Movie) => {
     dispatch(reviewsActions.loading());
     dispatch(reviewsActions.fetch(movie));
+
     router.push('/reviews');
   };
 
   useEffect(() => {
-    console.log('error', error);
     if (error)
       setSnackbar({
         open: true,
