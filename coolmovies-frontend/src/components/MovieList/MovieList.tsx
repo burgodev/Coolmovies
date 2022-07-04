@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 import { makeStyles, createStyles } from '@mui/styles';
-import { Card, Theme, Grid, Skeleton, Box, Typography } from '@mui/material';
+import { Theme, Grid, Skeleton, Box, Typography } from '@mui/material';
 
 import { Snackbar } from '../';
 import { ISnackbar } from '../../types/typings';
@@ -39,7 +40,6 @@ const MovieList = () => {
 
     router.push('/reviews');
   };
-
   useEffect(() => {
     if (error)
       setSnackbar({
@@ -69,14 +69,13 @@ const MovieList = () => {
             lg={4}
             xl={3}
             className={classes.item}>
-            <Card
+            <Image
+              alt={movie.title}
               key={movie.id}
               data-testid='card'
-              className={classes.card}
               onClick={() => selectMovie(movie)}
-              style={{
-                backgroundImage: `url(${movie.imgUrl})`,
-              }}
+              src={movie.imgUrl}
+              layout='fill'
             />
           </Grid>
         ))}
@@ -111,7 +110,7 @@ const SkeletonMovieList = () => {
           lg={4}
           xl={3}
           className={classes.item}>
-          <Skeleton width={'100%'} height={500} />
+          <Skeleton width={'100%'} height={600} />
         </Grid>
       ))}
     </Grid>
@@ -120,23 +119,6 @@ const SkeletonMovieList = () => {
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    card: {
-      backgroundSize: 'cover',
-      height: 500,
-      width: '100%',
-      cursor: 'pointer',
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-      transition: '0.3s',
-      '&:hover': {
-        opacity: 0.5,
-        transitionTimingFunction: 'ease-out',
-        transform: 'scale(1.05)',
-        transition: '0.3s',
-      },
-    },
     selectMovie: {
       padding: '0px 32px 0',
       display: 'flex',
@@ -156,6 +138,17 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     item: {
+      height: 600,
+      width: '100%',
+      cursor: 'pointer',
+      opacity: 0.75,
+      transition: '0.3s',
+      '&:hover': {
+        opacity: 1,
+        transitionTimingFunction: 'ease-out',
+        transform: 'scale(1.05)',
+      },
+      position: 'relative',
       [theme.breakpoints.down('sm')]: {
         padding: '8px 4px 0 !important',
       },
